@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>YoPrint CSV Upload</title>
+</head>
+<body>
+
+<h2>Upload CSV</h2>
+<input type="file" id="fileInput">
+<button onclick="uploadFile()">Upload</button>
+
+<h2>Upload History</h2>
+<table border="1">
+    <thead>
+        <tr>
+            <th>Time</th>
+            <th>File</th>
+            <th>Status</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody id="uploadsTable"></tbody>
+</table>
+
+<script>
+function uploadFile() {
+    let file = document.getElementById("fileInput").files[0];
+    if (!file) {
+        alert("Choose a CSV file");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append("file", file);
+
+    fetch("/upload", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(data => alert("File uploaded!"));
+}
+
+function loadUploads() {
+    fetch("/uploads")
+        .then(res => res.json())
+        .then(data => {
+            let table = document.getElementById("uploadsTable");
+            table.innerHTML = "";
+
+            data.forEach(row => {
+                let tr = document.createElement("tr");
+                tr.innerHTML = `
+                    <td>${row.created_at}</td>
+                    <td>${row.filename}</td>
+                    <td>${row.status}</td>
+                    <td>${row.message}</td>
+                `;
+                table.appendChild(tr);
+            });
+        });
+}
+
+setInterval(loadUploads, 2000);
+</script>
+
+</body>
+</html>

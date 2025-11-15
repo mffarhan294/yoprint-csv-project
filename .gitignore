@@ -1,0 +1,19 @@
+# Database
+yoprint.db
+
+# Uploaded CSVs
+uploads/
+
+# Error logs
+error_logs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
